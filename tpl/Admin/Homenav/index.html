@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<title>前台菜单管理</title>
+	<bootstrapcss />
+</head>
+<body>
+<!-- 导航栏开始 -->
+<div class="bjy-admin-nav">
+	<a href="{:U('Admin/Index/index')}"><i class="fa fa-home"></i> 首页</a>
+	&gt;
+	前台导航管理
+</div>
+<!-- 导航栏结束 -->
+<ul id="myTab" class="nav nav-tabs">
+   <li class="active">
+		 <a href="#home" data-toggle="tab">导航列表</a>
+   </li>
+   <li>
+		<a href="javascript:;" onclick="add()">添加导航</a>
+	</li>
+</ul>
+<form action="{:U('Admin/Homenav/order')}" method="post">
+	<div id="myTabContent" class="tab-content">
+	   <div class="tab-pane fade in active" id="home">
+			<table class="table table-striped table-bordered table-hover table-condensed">
+				<tr>
+					<th width="5%">排序</th>
+					<th>导航名称</th>
+					<th>连接</th>
+					<th>数据来源</th>
+					<th>每页显示条数</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+				<foreach name="data" item="v">
+					<tr>
+						<td>
+							<input class="form-control" style="width:40px;height:25px;" type="text" name="{$v['id']}" value="{$v['sort']}">
+						</td>
+						<td>{$v['_name']}</td>
+						<td>{$v['url']}</td>
+						<td>{$v['data_type']}</td>
+						<td>{$v['page_size']}</td>
+						<td>{$v['status']}</td>
+						<td>
+							<a href="javascript:;" navId="{$v['id']}" navName="{$v['name']}"  onclick="add_child(this)">添加子导航</a> |
+							<a href="javascript:;" navId="{$v['id']}" navName="{$v['name']}" onclick="edit(this)">修改</a> |
+							<a href="javascript:if(confirm('确定删除？'))location='{:U('Admin/Homenav/delete',array('id'=>$v['id']))}'">删除</a>
+						</td>
+					</tr>
+				</foreach>
+				<tr>
+					<th>
+						<input class="btn btn-success" type="submit" value="排序">
+					</th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+	   </div>
+	</div>
+</form>
+<!-- 添加菜单模态框开始 -->
+<div class="modal fade" id="bjy-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		 <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					添加导航
+				</h4>
+			</div>
+			<div class="modal-body">
+				<form id="bjy-form" class="form-horizontable" action="{:U('Admin/Homenav/add')}" method="post">
+					<input type="hidden" name="pid" value="0">
+					<table class="table table-striped table-bordered table-hover table-condensed">
+						<tr>
+							<th width="20%">导航名称</th>
+							<td>
+								<input class="form-control" type="text" name="name" placeholder="必填：建议不要超过8个字">
+							</td>
+						</tr>
+						<tr>
+							<th>跳转链接</th>
+							<td>
+								<input class="form-control" type="text" name="url" placeholder="选填，站外地址请填写带http协议头的绝对路径">
+							</td>
+						</tr>
+						<tr>
+							<th>每页显示条数</th>
+							<td>
+								<input class="form-control" type="text" name="page_size" placeholder="选填：列表页每页显示条数，默认为5">
+							</td>
+						</tr>
+						<tr>
+							<th>显示状态</th>
+							<td>
+								<label style="margin-right:20px;"><input type="radio" name="status" value="0" checked="true">隐藏</label>
+								<label><input type="radio" name="status" value="1">显示</label>
+							</td>
+						</tr>
+						<tr>
+							<th>数据来源</th>
+							<td>
+								<label style="margin-right:20px;"><input type="radio" name="data_type" value="0" checked="true">忽略</label>
+								<label style="margin-right:20px;"><input type="radio" name="data_type" value="1">自动抓取</label>
+								<label><input type="radio" name="data_type" value="2">后台录入</label>
+							</td>
+						</tr>
+						<tr>
+							<th>抓取-域名</th>
+							<td>
+								<input class="form-control" type="text" name="host" placeholder="自动抓取时生效：抓取站域名(带http协议头，末尾不带“/”)">
+							</td>
+						</tr>
+						<tr>
+							<th>抓取-地址</th>
+							<td>
+								<input class="form-control" type="text" name="src_list" placeholder="自动抓取时生效：抓取的绝对url，{page}表示页码通配符">
+							</td>
+						</tr>
+						<tr>
+							<th>抓取-最大页码</th>
+							<td>
+								<input class="form-control" type="text" name="max_page" placeholder="自动抓取时生效：初始抓取数据时的最大页码">
+							</td>
+						</tr>
+						<tr>
+							<th>抓取-前*页</th>
+							<td>
+								<input class="form-control" type="text" name="cur_page" placeholder="自动抓取时生效：定时抓取时每次抓取前几页">
+							</td>
+						</tr>
+						<tr>
+							<th>正则-文章列表</th>
+							<td>
+								<input class="form-control" type="text" name="reg_list" placeholder="自动抓取时生效：匹配文章列表的正则">
+							</td>
+						</tr>
+						<tr>
+							<th>正则-文章信息</th>
+							<td>
+								<input class="form-control" type="text" name="reg_li" placeholder="自动抓取时生效：匹配列表每一行的正则">
+							</td>
+						</tr>
+						<tr>
+							<th>正则-文章详情</th>
+							<td>
+								<input class="form-control" type="text" name="reg_detail" placeholder="自动抓取时生效：匹配文章详情页的正则">
+							</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td>
+								<input class="btn btn-success" type="submit" value="添加">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 添加菜单模态框结束 -->
+
+<!-- 修改菜单模态框开始 -->
+<div class="modal fade" id="bjy-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		 <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					修改菜单
+				</h4>
+			</div>
+			<div class="modal-body">
+				<form id="bjy-form" class="form-horizontable" action="{:U('Admin/Homenav/edit')}" method="post">
+					<input type="hidden" name="id">
+					<table class="table table-striped table-bordered table-hover table-condensed">
+						<tr>
+							<th width="20%">导航名称</th>
+							<td>
+								<input class="form-control" type="text" name="name" placeholder="必填：建议不要超过8个字">
+							</td>
+						</tr>
+						<tr>
+							<th>跳转链接</th>
+							<td>
+								<input class="form-control" type="text" name="url" placeholder="选填，站外地址请填写带http协议头的绝对路径">
+							</td>
+						</tr>
+						<tr>
+							<th>每页显示条数</th>
+							<td>
+								<input class="form-control" type="text" name="page_size" placeholder="选填：列表页每页显示条数，默认为5">
+							</td>
+						</tr>
+						<tr>
+							<th>显示状态</th>
+							<td>
+								<label style="margin-right:20px;"><input type="radio" name="status" value="0" checked="true">隐藏</label>
+								<label><input type="radio" name="status" value="1">显示</label>
+							</td>
+						</tr>
+						<tr>
+							<th>数据来源</th>
+							<td>
+								<label style="margin-right:20px;"><input type="radio" name="data_type" value="0" checked="true">忽略</label>
+								<label style="margin-right:20px;"><input type="radio" name="data_type" value="1">自动抓取</label>
+								<label><input type="radio" name="data_type" value="2">后台录入</label>
+							</td>
+						</tr>
+						<tr>
+							<th>抓取-域名</th>
+							<td>
+								<input class="form-control" type="text" name="host" placeholder="自动抓取时生效：抓取站域名(带http协议头，末尾不带“/”)">
+							</td>
+						</tr>
+						<tr>
+							<th>抓取-地址</th>
+							<td>
+								<input class="form-control" type="text" name="src_list" placeholder="自动抓取时生效：抓取的绝对url，{page}表示页码通配符">
+							</td>
+						</tr>
+						<tr>
+							<th>抓取-最大页码</th>
+							<td>
+								<input class="form-control" type="text" name="max_page" placeholder="自动抓取时生效：初始抓取数据时的最大页码">
+							</td>
+						</tr>
+						<tr>
+							<th>抓取-前*页</th>
+							<td>
+								<input class="form-control" type="text" name="cur_page" placeholder="自动抓取时生效：定时抓取时每次抓取前几页">
+							</td>
+						</tr>
+						<tr>
+							<th>正则-文章列表</th>
+							<td>
+								<input class="form-control" type="text" name="reg_list" placeholder="自动抓取时生效：匹配文章列表的正则">
+							</td>
+						</tr>
+						<tr>
+							<th>正则-文章信息</th>
+							<td>
+								<input class="form-control" type="text" name="reg_li" placeholder="自动抓取时生效：匹配列表每一行的正则">
+							</td>
+						</tr>
+						<tr>
+							<th>正则-文章详情</th>
+							<td>
+								<input class="form-control" type="text" name="reg_detail" placeholder="自动抓取时生效：匹配文章详情页的正则">
+							</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td>
+								<input class="btn btn-success" type="submit" value="修改">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 修改菜单模态框结束 -->
+<bootstrapjs />
+<script>
+// 添加菜单
+function add(){
+	$("#bjy-add input[type='text']").val('');
+	$("#bjy-add input[type='radio'][value='0']").attr('checked',true);
+	$("input[name='pid']").val(0);
+	$('#bjy-add').modal('show');
+}
+
+// 添加子菜单
+function add_child(obj){
+	var navId=$(obj).attr('navId');
+	$("input[name='pid']").val(navId);
+	$("#bjy-add input[type='text']").val('');
+	$("#bjy-add input[type='radio'][value='0']").attr('checked',true);
+	$('#bjy-add').modal('show');
+}
+
+// 修改菜单
+function edit(obj){
+	var navId=$(obj).attr('navId');
+	$.ajax({
+		type:'post',
+		data:{id:navId},
+		url:'{:U("Homenav/detail")}',
+		success:function(res){
+			if(res.code==200){
+				var obj = $('#bjy-edit');
+				for(var i in res.data){
+					if(i=='status'||i=='data_type'){
+						obj.find("input[name='"+i+"'][value='"+res.data[i]+"']").attr('checked',true);
+						continue;
+					}
+					obj.find("input[name='"+i+"']").val(res.data[i]);
+				}
+			}else{
+				alert('数据加载失败');
+			}
+		}
+	})
+	$('#bjy-edit').modal('show');
+}
+
+</script>
+</body>
+</html>

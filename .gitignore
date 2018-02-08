@@ -1,0 +1,7 @@
+.idea
+Runtime
+Uploads
+.settings
+vendor
+Upload\image\ueditor
+Application\Common\Conf\db.php

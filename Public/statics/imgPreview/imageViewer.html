@@ -1,0 +1,18 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="imageviewer.css" rel="stylesheet" type="text/css" />
+    <script src="imageviewer.js" type="text/javascript"></script>
+</head>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart ="return false" onbeforecopy="return false">
+    <div id='block1' name="block1" onmouseout='drag=0' onmouseover='dragObj=block1; drag=1;' style='z-index:10; height:0;  position: absolute; width: 0;' class="dragAble"> <img name='imgPreview' id="imgPreview" border='0'></div>
+    <div id="operate" style="position:absolute;z-index:11; text-align:center;display:none;">
+    <img src="images/small.png" width="40" height="40" style="cursor:pointer" onClick="smallit();">
+    <img src="images/sun.png" width="40" height="40" style="cursor:pointer" onClick="realsize();">
+    <img src="images/big.png" width="40" height="40" style="cursor:pointer" onClick="bigit();">
+    </div>
+    <inpu type="hidden" id="hidwidth"></inpu>
+    <inpu type="hidden" id="hidheight"></inpu>
+</body>
+</html>

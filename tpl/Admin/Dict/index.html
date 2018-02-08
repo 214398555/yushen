@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<title>字典库管理</title>
+	<bootstrapcss />
+</head>
+<body>
+<!-- 导航栏开始 -->
+<div class="bjy-admin-nav">
+	<a href="{:U('Admin/Index/index')}"><i class="fa fa-home"></i> 首页</a>
+	&gt;
+	字典库管理
+</div>
+<!-- 导航栏结束 -->
+<ul id="myTab" class="nav nav-tabs">
+   <li class="active">
+		 <a href="#home" data-toggle="tab">字典列表</a>
+   </li>
+   <li>
+		<a href="javascript:;" onclick="add()">添加字典</a>
+	</li>
+   <li>
+		<a href="javascript:;" onclick="clearCache()">清除前台缓存</a>
+	</li>
+</ul>
+<div id="myTabContent" class="tab-content">
+   <div class="tab-pane fade in active" id="home">
+		<table class="table table-striped table-bordered table-hover table-condensed">
+			<tr>
+				<th width="5%">序号</th>
+				<th>类型</th>
+				<th>键名</th>
+				<th>键值</th>
+				<th>排序</th>
+				<th>描述</th>
+				<th>操作</th>
+			</tr>
+			<foreach name="data" item="v" key="key">
+				<tr>
+            		<td>{:$page->firstRow+$key+1}</td>
+					<td>{$v['type']}</td>
+					<td>{$v['title']}</td>
+					<td>{$v['value']}</td>
+					<td>{$v['listorder']}</td>
+					<td>{$v['description']}</td>
+					<td>
+						<a href="javascript:;" dictId="{$v['id']}" onclick="edit(this)">修改</a> |
+						<a href="javascript:if(confirm('确定删除？'))location='{:U('Admin/Dict/delete',array('id'=>$v['id']))}'">删除</a>
+					</td>
+				</tr>
+			</foreach>
+		</table>
+	    <div class="page">
+	        {$page}
+	    </div>
+   </div>
+</div>
+<!-- 添加菜单模态框开始 -->
+<div class="modal fade" id="bjy-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		 <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					添加数据
+				</h4>
+			</div>
+			<div class="modal-body">
+				<form id="bjy-form" class="form-horizontable" action="{:U('Admin/Dict/add')}" method="post">
+					<input type="hidden" name="pid" value="0">
+					<table class="table table-striped table-bordered table-hover table-condensed">
+						<tr>
+							<th width="12%">类型</th>
+							<td>
+								<input class="form-control" type="text" name="type" placeholder="必填：建议为英文或数字">
+							</td>
+						</tr>
+						<tr>
+							<th>键名</th>
+							<td>
+								<input class="form-control" type="text" name="title" placeholder="必填">
+							</td>
+						</tr>
+						<tr>
+							<th>键值</th>
+							<td>
+								<input class="form-control" type="text" name="value" placeholder="必填">
+							</td>
+						</tr>
+						<tr>
+							<th>排序</th>
+							<td>
+								<input class="form-control" type="text" name="listorder" placeholder="选填：必须为数字">
+							</td>
+						</tr>
+						<tr>
+							<th>描述</th>
+							<td>
+								<textarea class="form-control" row="3" name="description" placeholder="选填：备注或描述，可填写大段内容"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td>
+								<input class="btn btn-success" type="submit" value="添加">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 添加菜单模态框结束 -->
+
+<!-- 修改菜单模态框开始 -->
+<div class="modal fade" id="bjy-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		 <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					修改菜单
+				</h4>
+			</div>
+			<div class="modal-body">
+				<form id="bjy-form" class="form-horizontable" action="{:U('Admin/Dict/edit')}" method="post">
+					<input type="hidden" name="id">
+					<table class="table table-striped table-bordered table-hover table-condensed">
+						<tr>
+							<th width="12%">类型</th>
+							<td>
+								<input class="form-control" type="text" name="type" placeholder="必填：建议为英文或数字">
+							</td>
+						</tr>
+						<tr>
+							<th>键名</th>
+							<td>
+								<input class="form-control" type="text" name="title" placeholder="必填">
+							</td>
+						</tr>
+						<tr>
+							<th>键值</th>
+							<td>
+								<input class="form-control" type="text" name="value" placeholder="必填">
+							</td>
+						</tr>
+						<tr>
+							<th>排序</th>
+							<td>
+								<input class="form-control" type="text" name="listorder" placeholder="选填：必须为数字">
+							</td>
+						</tr>
+						<tr>
+							<th>描述</th>
+							<td>
+								<textarea class="form-control" row="3" name="description" placeholder="选填：备注或描述，可填写大段内容"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td>
+								<input class="btn btn-success" type="submit" value="修改">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 修改菜单模态框结束 -->
+<bootstrapjs />
+<script>
+// 添加菜单
+function add(){
+	$("#bjy-add input[type='text']").val('');
+	$("#bjy-add textarea[type='text']").val('');
+	$('#bjy-add').modal('show');
+}
+function clearCache(){
+	if(confirm('确定要清除前台缓存吗？'))
+	$.ajax({
+		type:"POST",
+		url:'{:U("Dict/clear_cache")}',
+		success:function(res){
+			if(res.code==200){
+				alert('操作成功，缓存已清除');
+			}else{
+				alert('操作失败');
+			}
+		}
+	})
+}
+// 修改菜单
+function edit(obj){
+	var id=$(obj).attr('dictId');
+	$.ajax({
+		type:'post',
+		data:{id:id},
+		url:'{:U("Dict/detail")}',
+		success:function(res){
+			if(res.code==200){
+				var obj = $('#bjy-edit');
+				for(var i in res.data){
+					if(i=='description'){
+						obj.find("textarea[name='"+i+"']").val(res.data[i]);
+						continue;
+					}
+					obj.find("input[name='"+i+"']").val(res.data[i]);
+				}
+			}else{
+				alert('数据加载失败');
+			}
+		}
+	})
+	$('#bjy-edit').modal('show');
+}
+
+</script>
+</body>
+</html>
