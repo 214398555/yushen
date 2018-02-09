@@ -44,7 +44,6 @@ define("OSS_URL","");
 
 
 require  __DIR__ .'/vendor/autoload.php';
-// require  __DIR__ .'/vendor/phpoffice/phpword/bootstrap.php';
 // 引入ThinkPHP入口文件
 require './Think/ThinkPHP.php';
 
