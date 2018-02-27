@@ -113,7 +113,8 @@
         <th>订单名称</th>
 		<th>订单内容</th>
 		<th>创建人</th>
-        <th>创建时间</th>
+		<th>创建时间</th>
+		<th>状态</th>
         <th>操作</th>
     </tr>
 	<tbody>
@@ -123,6 +124,15 @@
 			<td>{$v['content']}</td>
             <td>{$v['username']}</td>
             <td>{$v['create_time'] ? date('Y-m-d H:i:s', $v['create_time']) : '---'}</td>
+			<td>
+				<if condition="$v['status'] == 0">
+					待提交
+				<elseif condition="$v['status'] == 10" />
+					待审核
+				<elseif condition="$v['status'] == 20" />
+					已完成
+				</if>
+			</td>
 			<td class="last">
 				<if condition="($v['status'] == 0 || $v['status'] == 10)">
 					<a href="javascript:;" onclick="edit(this, {$v['id']})">编辑</a>
