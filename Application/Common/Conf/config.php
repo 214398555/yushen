@@ -49,13 +49,15 @@ return array(
     'default_host'=>'http://47.88.137.82:501',
     //邮件配置
     'THINK_EMAIL' => array(
-        'SMTP_HOST'   => 'smtp.163.com', //SMTP服务器
-        'SMTP_PORT'   => '25', //SMTP服务器端口
-        'SMTP_USER'   => 'wangjun__mr@163.com', //SMTP服务器用户名
-        'SMTP_PASS'   => '123qwe', //SMTP服务器密码   //授权码123qwe  //密码qwe123
-        'FROM_EMAIL'  => 'wangjun__mr@163.com', //发件人EMAIL
-        'FROM_NAME'   => 'wangjun__mr', //发件人名称
-        'REPLY_EMAIL' => '', //回复EMAIL（留空则为发件人EMAIL）
-        'REPLY_NAME'  => '', //回复名称（留空则为发件人名称）
+        'SMTP_HOST'        => 'smtp.163.com', //SMTP服务器
+        'SMTP_PORT'        => '25', //SMTP服务器端口 163 25
+        'SMTP_USER'        => '13811782174@163.com', //SMTP服务器用户名
+        'SMTP_PASS'        => 'qwe123', //SMTP服务器密码
+        'FROM_EMAIL'       => '13811782174@163.com', //发件人EMAIL
+        'FROM_NAME'        => '宇绅服饰', //发件人名称
+        'REPLY_EMAIL'      => '', //回复EMAIL（留空则为发件人EMAIL）
+        'REPLY_NAME'       => '', //回复名称（留空则为发件人名称）
+        'RECIPIENTS'       => '13811782174@163.com',
+        'RECIPIENTS_NAME'  => 'hyz'
     ),
 );
