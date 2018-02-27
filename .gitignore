@@ -2,6 +2,6 @@
 Runtime
 Uploads
 .settings
-vendor
+/vendor
 Upload\image\ueditor
-Application\Common\Conf\db.php
+/Application/Common/Conf/db.php
